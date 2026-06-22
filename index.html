@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday, Dad 🎂</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:       #0D1B4B;
+    --navy-mid:   #1A2E6F;
+    --navy-light: #2A3F8F;
+    --white:      #FFFFFF;
+    --off-white:  #F7F9FF;
+    --blue-soft:  #E8EFFF;
+    --gold:       #C9A84C;
+    --gold-light: #E8CC7A;
+    --gold-pale:  #FBF5E6;
+    --rose:       #C4556A;
+    --text-dark:  #0D1B4B;
+    --text-muted: #5A6A9A;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: var(--white); color: var(--text-dark); overflow-x: hidden; }
+
+  /* ── CONFETTI ── */
+  #confetti-canvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 998; }
+
+  /* ── MUSIC BUTTON ── */
+  #musicBtn {
+    position: fixed;
+    top: 20px; right: 20px;
+    z-index: 1001;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 30px;
+    background: var(--gold);
+    color: var(--navy);
+    cursor: pointer;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    box-shadow: 0 4px 16px rgba(201,168,76,0.4);
+    transition: background 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  #musicBtn:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 55%, #1C3380 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    position: relative; overflow: hidden; padding: 60px 24px; text-align: center;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -120px; right: -120px;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.18) 0%, transparent 70%); pointer-events: none;
+  }
+  .hero::after {
+    content: ''; position: absolute; bottom: -100px; left: -80px;
+    width: 380px; height: 380px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.10) 0%, transparent 70%); pointer-events: none;
+  }
+  .stars { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .star {
+    position: absolute; width: 2px; height: 2px; background: white; border-radius: 50%;
+    animation: twinkle 3s infinite ease-in-out;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50%       { opacity: 1;   transform: scale(1.5); }
+  }
+  .hero-eyebrow {
+    font-size: 11px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold-light); margin-bottom: 20px; position: relative; z-index: 1;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(52px, 9vw, 110px); font-weight: 900;
+    color: var(--white); line-height: 1.0; position: relative; z-index: 1; letter-spacing: -1px;
+  }
+  .hero-title em { font-style: italic; color: var(--gold-light); display: block; }
+  .hero-subtitle {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(22px, 4vw, 38px); color: rgba(255,255,255,0.72);
+    margin-top: 18px; position: relative; z-index: 1;
+  }
+  .gold-divider {
+    width: 80px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 30px auto; position: relative; z-index: 1;
+  }
+  .scroll-hint {
+    position: absolute; bottom: 36px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    animation: float 2s ease-in-out infinite; z-index: 1;
+  }
+  .scroll-hint span { font-size: 11px; color: rgba(255,255,255,0.45); letter-spacing: 3px; text-transform: uppercase; }
+  .scroll-arrow {
+    width: 22px; height: 22px;
+    border-right: 2px solid rgba(201,168,76,0.6);
+    border-bottom: 2px solid rgba(201,168,76,0.6);
+    transform: rotate(45deg);
+  }
+  @keyframes float {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50%       { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* ── PHOTO ── */
+  .photo-section {
+    background: var(--off-white); padding: 100px 24px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .section-label { font-size: 11px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 52px); font-weight: 700;
+    color: var(--navy); text-align: center; margin-bottom: 60px; line-height: 1.2;
+  }
+  .polaroid-wrap { position: relative; width: 300px; }
+  .polaroid {
+    background: var(--white); padding: 20px 20px 56px;
+    box-shadow: 0 20px 60px rgba(13,27,75,0.18), 0 4px 12px rgba(13,27,75,0.08);
+    border-radius: 3px; transform: rotate(-1.5deg);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    cursor: pointer; position: relative;
+  }
+  .polaroid:hover { transform: rotate(0deg) scale(1.03); box-shadow: 0 32px 80px rgba(13,27,75,0.24); }
+  .polaroid-inner {
+    width: 100%; aspect-ratio: 1; background: var(--blue-soft);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    overflow: hidden; position: relative;
+  }
+  .polaroid-inner img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .upload-prompt { display: flex; flex-direction: column; align-items: center; gap: 10px; color: var(--text-muted); }
+  .upload-icon { width: 52px; height: 52px; border-radius: 50%; background: rgba(13,27,75,0.08); display: flex; align-items: center; justify-content: center; }
+  .upload-icon svg { opacity: 0.5; }
+  .upload-prompt p { font-size: 13px; text-align: center; line-height: 1.5; padding: 0 8px; }
+  .photo-caption { text-align: center; margin-top: 14px; font-family: 'Dancing Script', cursive; font-size: 20px; color: var(--navy); font-weight: 600; }
+  .gold-stamp {
+    position: absolute; top: -18px; right: -18px;
+    width: 64px; height: 64px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 28px; box-shadow: 0 4px 16px rgba(201,168,76,0.4); z-index: 2;
+    animation: pulse-gold 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse-gold {
+    0%, 100% { box-shadow: 0 4px 16px rgba(201,168,76,0.4); }
+    50%       { box-shadow: 0 4px 28px rgba(201,168,76,0.7); }
+  }
+  #photo-input { display: none; }
+  .upload-btn {
+    margin-top: 28px; background: var(--navy); color: var(--white); border: none;
+    padding: 13px 32px; border-radius: 40px; font-size: 13px; font-weight: 600; letter-spacing: 1px;
+    cursor: pointer; transition: background 0.3s, transform 0.2s;
+    font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 10px;
+  }
+  .upload-btn:hover { background: var(--navy-light); transform: translateY(-2px); }
+
+  /* ── MESSAGE ── */
+  .message-section { background: var(--white); padding: 100px 24px; display: flex; flex-direction: column; align-items: center; }
+  .message-card {
+    max-width: 680px; width: 100%; background: var(--navy);
+    border-radius: 20px; padding: 60px 52px;
+    position: relative; overflow: hidden; box-shadow: 0 32px 80px rgba(13,27,75,0.22);
+  }
+  .message-card::before {
+    content: '"'; position: absolute; top: -20px; left: 32px;
+    font-family: 'Playfair Display', serif; font-size: 200px;
+    color: rgba(201,168,76,0.12); line-height: 1; pointer-events: none;
+  }
+  .message-card::after {
+    content: ''; position: absolute; bottom: -80px; right: -80px;
+    width: 240px; height: 240px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%); pointer-events: none;
+  }
+  .message-text {
+    font-family: 'Playfair Display', serif; font-size: clamp(18px, 2.6vw, 24px);
+    color: var(--white); line-height: 1.8; position: relative; z-index: 1;
+    font-style: italic; text-align: center;
+  }
+  .message-from {
+    display: block; margin-top: 32px; font-family: 'Dancing Script', cursive;
+    font-size: 26px; color: var(--gold-light); text-align: right; position: relative; z-index: 1;
+  }
+
+  /* ── EDIT ── */
+  .edit-section {
+    background: var(--gold-pale); padding: 80px 24px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .edit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 680px; width: 100%; }
+  @media(max-width:600px){ .edit-grid { grid-template-columns: 1fr; } .message-card { padding: 40px 28px; } }
+  .edit-field { display: flex; flex-direction: column; gap: 7px; }
+  .edit-field.full-width { grid-column: 1 / -1; }
+  .edit-field label { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--navy-mid); }
+  .edit-field input, .edit-field textarea {
+    border: 2px solid rgba(13,27,75,0.12); border-radius: 10px;
+    padding: 13px 16px; font-family: 'Inter', sans-serif; font-size: 15px;
+    color: var(--navy); background: var(--white); transition: border-color 0.2s; outline: none; resize: vertical;
+  }
+  .edit-field input:focus, .edit-field textarea:focus { border-color: var(--gold); }
+  .edit-field textarea { min-height: 140px; }
+  .save-btn {
+    margin-top: 28px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--navy); border: none; padding: 15px 44px; border-radius: 40px;
+    font-size: 14px; font-weight: 700; letter-spacing: 1px; cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s; font-family: 'Inter', sans-serif;
+    box-shadow: 0 6px 24px rgba(201,168,76,0.38);
+  }
+  .save-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(201,168,76,0.5); }
+
+  /* ── GALLERY ── */
+  .gallery-section { background: var(--off-white); padding: 100px 24px; display: flex; flex-direction: column; align-items: center; }
+  .gallery-grid {
+    max-width: 860px; width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 8px;
+  }
+  @media(max-width: 640px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media(max-width: 400px) { .gallery-grid { grid-template-columns: 1fr; } }
+
+  .gallery-cell {
+    position: relative;
+    aspect-ratio: 1;
+    background: var(--blue-soft);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px dashed rgba(13,27,75,0.12);
+  }
+  .gallery-cell:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(13,27,75,0.16); border-color: var(--gold); }
+  .gallery-cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .gallery-cell.filled { border: none; }
+  .gallery-cell.filled img { display: block; }
+
+  .gallery-add-icon {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 8px; color: var(--text-muted);
+  }
+  .gallery-add-icon span { font-size: 28px; opacity: 0.35; line-height: 1; }
+  .gallery-add-icon p { font-size: 11px; letter-spacing: 1px; opacity: 0.5; text-align: center; }
+  .gallery-cell.filled .gallery-add-icon { display: none; }
+
+  /* hover overlay on filled cells */
+  .gallery-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(13,27,75,0.7) 100%);
+    opacity: 0; transition: opacity 0.3s;
+    display: flex; align-items: flex-end; padding: 14px;
+  }
+  .gallery-cell.filled:hover .gallery-overlay { opacity: 1; }
+  .gallery-overlay-label {
+    font-family: 'Dancing Script', cursive;
+    font-size: 15px; color: var(--white); font-weight: 600;
+  }
+
+  .gallery-upload-btn {
+    margin-top: 32px; background: var(--navy); color: var(--white); border: none;
+    padding: 13px 32px; border-radius: 40px; font-size: 13px; font-weight: 600; letter-spacing: 1px;
+    cursor: pointer; transition: background 0.3s, transform 0.2s;
+    font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 10px;
+  }
+  .gallery-upload-btn:hover { background: var(--navy-light); transform: translateY(-2px); }
+  #gallery-input { display: none; }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed; inset: 0; background: rgba(13,27,75,0.92);
+    z-index: 900; display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    padding: 24px;
+  }
+  .lightbox.open { opacity: 1; pointer-events: all; }
+  .lightbox img { max-width: 90vw; max-height: 85vh; border-radius: 8px; box-shadow: 0 32px 80px rgba(0,0,0,0.5); }
+  .lightbox-close {
+    position: absolute; top: 24px; right: 28px;
+    font-size: 32px; color: rgba(255,255,255,0.6); cursor: pointer;
+    line-height: 1; transition: color 0.2s;
+    background: none; border: none;
+  }
+  .lightbox-close:hover { color: var(--gold-light); }
+
+  /* ── ENDING (NEW) ── */
+  .ending-section {
+    background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 60%, #1C3380 100%);
+    padding: 120px 24px 100px;
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .ending-section::before {
+    content: ''; position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 65%); pointer-events: none;
+  }
+  .ending-line { width: 1px; height: 64px; background: linear-gradient(180deg, transparent, var(--gold)); margin-bottom: 40px; }
+  .ending-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 3.5vw, 38px); font-weight: 400; font-style: italic;
+    color: var(--white); max-width: 640px; line-height: 1.7;
+    position: relative; z-index: 1; margin-bottom: 14px;
+  }
+  .ending-quote span { color: var(--gold-light); }
+  .ending-attribution {
+    font-size: 11px; font-weight: 500; letter-spacing: 4px; text-transform: uppercase;
+    color: rgba(255,255,255,0.3); margin-bottom: 52px; position: relative; z-index: 1;
+  }
+  .ending-divider { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin-bottom: 48px; }
+  .ending-message {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(28px, 4.5vw, 50px);
+    color: var(--white); line-height: 1.5; max-width: 560px;
+    position: relative; z-index: 1; margin-bottom: 20px;
+  }
+  .ending-message em { color: var(--gold-light); font-style: normal; }
+  .ending-from {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(20px, 2.5vw, 28px);
+    color: rgba(255,255,255,0.55);
+    position: relative; z-index: 1; margin-top: 4px;
+  }
+  .ending-hearts { display: flex; gap: 10px; margin-top: 48px; position: relative; z-index: 1; }
+  .heart { font-size: 18px; animation: heartbeat 2.4s ease-in-out infinite; opacity: 0.7; }
+  .heart:nth-child(2) { animation-delay: 0.3s; font-size: 26px; opacity: 1; }
+  .heart:nth-child(3) { animation-delay: 0.6s; }
+  @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 32px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--navy); color: var(--white);
+    padding: 14px 28px; border-radius: 40px; font-size: 14px; font-weight: 500;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25); border-left: 3px solid var(--gold);
+    transition: transform 0.4s ease; z-index: 1000; white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<!-- ── MUSIC BUTTON ── -->
+<button id="musicBtn" onclick="toggleMusic()">🎵 Play Music</button>
+<audio id="bgMusic" loop>
+  <source src="birthday-song.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="stars" id="stars"></div>
+  <p class="hero-eyebrow">✦ A special tribute ✦</p>
+  <h1 class="hero-title">Happy<br><em>Birthday</em></h1>
+  <p class="hero-subtitle" id="hero-dad-name"></p>
+  <div class="gold-divider"></div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ── PHOTO ── -->
+<section class="photo-section">
+  <p class="section-label">✦ A face I'll always cherish ✦</p>
+  <h2 class="section-title">My Favourite<br>Photograph</h2>
+  <div class="polaroid-wrap">
+    <div class="polaroid" >
+      <div class="gold-stamp">📸</div>
+      <div class="polaroid-inner" id="polaroid-inner">
+        <div class="upload-prompt" id="upload-prompt">
+        
+          
+        </div>
+        <img id="photo-preview"
+            src="dad.jpeg"
+            alt="Dad's Photo"
+          >
+      </div>
+    </div>
+      </div>
+  <input type="file" id="photo-input" accept="image/*">
+ 
+</section>
+
+
+
+<!-- ── MESSAGE ── -->
+<section class="message-section">
+  <p class="section-label">✦ Words from the heart ✦</p>
+  <h2 class="section-title">A Letter to Dad</h2>
+  <div class="message-card">
+    <p class="message-text" id="display-message">
+      Happy Birthday, Pappa ❤️<br>
+
+I don't say this often, but I want you to know how much you mean to me.
+
+When I think of you, I think of a hardworking man who has always done everything he could for his family. You have always been strict when needed, but behind that strictness was care, love, and a desire to see me become a better person.
+
+One thing I admire most about you is the trust you have always shown in me. You never forced your choices on me. Instead, you gave me the freedom to make my own decisions, learn from my mistakes, and find my own path in life. That trust means more to me than I can ever explain.
+
+You have always supported me, even when things were uncertain, and your belief in me has given me the confidence to keep moving forward. Many of the opportunities and dreams I have today are possible because of the sacrifices, hard work, and support you have given me throughout my life.
+
+There is one thing I probably don't say enough: I love you very much, Pappa. More than words can express. I am proud to be your son, and I feel lucky to have you as my father.
+
+On your birthday, I just want to thank you for everything you have done and continue to do for our family. I hope this year brings you the happiness, peace, and success that you truly deserve.
+
+<br>Happy Birthday, Pappa. ❤️<br>
+
+Love always,<br>
+Your Son
+
+    </p>
+    <em class="message-from" id="display-from">— Your Son, Abhiraj ❤️</em>
+  </div>
+</section>
+
+<!-- ── GALLERY ── -->
+<section class="gallery-section">
+  <p class="section-label">✦ Moments with you ✦</p>
+  <h2 class="section-title">Our Photographs<br>Together</h2>
+
+  <div class="gallery-grid" id="gallery-grid">
+    <!-- 6 empty cells, filled dynamically -->
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-0" src="img1.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-0"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-1" src = "img2.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-1"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-2" src="img3.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-3" src="img4.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-4" src="img5.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-5" src="img6.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-6" src="img7.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-7" src="img8.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-8" src="img9.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-9" src="img10.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-10" src="img11.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-11" src="img12.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-12" src="img13.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-13" src="img14.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-14" src="img15.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-15" src="img16.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-16" src="img17.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-17" src="img18.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-18" src="img19.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-19" src="img20.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-20" src="img21.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-21" src="img22.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-22" src="img23.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+    <div class="gallery-cell" >
+      <div class="gallery-add-icon"><span></span><p></p></div>
+      <img id="gimg-23" src="img24.jpg" alt="">
+      <div class="gallery-overlay"><span class="gallery-overlay-label" id="glabel-2"></span></div>
+    </div>
+  </div>
+
+  <input type="file" id="gallery-input" accept="image/*">
+  
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">×</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<!-- ── ENDING ── -->
+<section class="ending-section">
+  <div class="ending-line"></div>
+  <p class="ending-quote">
+    "Some people show love through words.
+You showed it through every sacrifice, every lesson, and every time you stood by my side.
+
+You never needed to say much—
+your actions spoke louder than anything else ever could.
+
+Your love was always there:
+quietly supporting me,
+guiding me,
+and believing in me even when I doubted myself.
+
+Thank you, Pappa, for being my strength, my support, and my home.
+
+I carry a part of you in everything I do,
+and I always will."
+
+  </p>
+  <p class="ending-attribution">— From your son, always</p>
+  <div class="ending-divider"></div>
+  <p class="ending-message">
+    Happy Birthday, Pappa.<br>
+    Thank you for being <em>exactly who you are.</em>
+  </p>
+  <p class="ending-from" id="ending-from">— Your Son, Abhiraj ❤️</p>
+  <div class="ending-hearts">
+    <span class="heart">♥</span>
+    <span class="heart">♥</span>
+    <span class="heart">♥</span>
+  </div>
+</section>
+
+<div class="toast" id="toast">✨ Saved!</div>
+
+<script>
+  /* ── STARS ── */
+  const sc = document.getElementById('stars');
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*4}s;animation-duration:${2+Math.random()*3}s;opacity:${Math.random()*0.6}`;
+    sc.appendChild(s);
+  }
+
+  /* ── MUSIC ── */
+  const music = document.getElementById('bgMusic');
+  function toggleMusic() {
+    if (music.paused) {
+      music.play().catch(() => showToast('Place birthday-song.mp3 next to this file'));
+      document.getElementById('musicBtn').innerHTML = '⏸ Pause Music';
+    } else {
+      music.pause();
+      document.getElementById('musicBtn').innerHTML = '🎵 Play Music';
+    }
+  }
+
+  /* ── SINGLE POLAROID PHOTO ── */
+  document.getElementById('photo-input').addEventListener('change', function(e) {
+    const file = e.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const img = document.getElementById('photo-preview');
+      img.src = ev.target.result; img.style.display = 'block';
+      document.getElementById('upload-prompt').style.display = 'none';
+      document.getElementById('photo-caption-text').textContent =
+        document.getElementById('input-caption').value || 'Our cherished memory 💙';
+      showToast('Photo added beautifully! 📸');
+    };
+    reader.readAsDataURL(file);
+  });
+
+  /* ── GALLERY ── */
+  let currentGallerySlot = 0;
+  const galleryLabels = ['Together', 'With love', 'Always smiling', 'My hero', 'Our family', 'Forever'];
+
+  function triggerGalleryUpload(slot) {
+    const img = document.getElementById(`gimg-${slot}`);
+    // If already filled, open lightbox
+    if (img.src && img.style.display === 'block') { openLightbox(img.src); return; }
+    currentGallerySlot = slot;
+    document.getElementById('gallery-input').click();
+  }
+
+  document.getElementById('gallery-input').addEventListener('change', function(e) {
+    const file = e.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    const slot = currentGallerySlot;
+    reader.onload = ev => {
+      const img = document.getElementById(`gimg-${slot}`);
+      img.src = ev.target.result; img.style.display = 'block';
+      document.getElementById(`glabel-${slot}`).textContent = galleryLabels[slot];
+      const cell = img.closest('.gallery-cell');
+      cell.classList.add('filled');
+      showToast('Photo added to gallery 🖼️');
+    };
+    reader.readAsDataURL(file);
+    this.value = '';
+  });
+
+  /* ── LIGHTBOX ── */
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+  /* ── LIVE UPDATES ── */
+  function updateName(val) {
+    document.getElementById('hero-dad-name').textContent = val || 'Dear Dad';
+  }
+  function updateFrom(val) {
+    const txt = val ? `— Your Son, ${val} ❤️` : '— Your Son, Abhiraj ❤️';
+    document.getElementById('display-from').textContent = txt;
+    document.getElementById('ending-from').textContent = txt;
+  }
+  function updateMessage(val) {
+    if (val.trim()) document.getElementById('display-message').textContent = val;
+  }
+  function updateCaption(val) {
+    if (document.getElementById('photo-preview').style.display === 'block')
+      document.getElementById('photo-caption-text').textContent = val || 'Our cherished memory 💙';
+  }
+
+  /* ── SAVE TO LOCALSTORAGE ── */
+  function saveData() {
+    localStorage.setItem('dadName',  document.getElementById('input-name').value);
+    localStorage.setItem('fromName', document.getElementById('input-from').value);
+    localStorage.setItem('message',  document.getElementById('input-message').value);
+    localStorage.setItem('caption',  document.getElementById('input-caption').value);
+    localStorage.setItem('year1',    document.getElementById('input-year1').value);
+    showToast('✨ Saved! Changes will persist next time.');
+    launchConfetti();
+  }
+
+  /* ── LOAD FROM LOCALSTORAGE ── */
+  window.addEventListener('load', () => {
+    const dadName  = localStorage.getItem('dadName');
+    const fromName = localStorage.getItem('fromName');
+    const message  = localStorage.getItem('message');
+    const caption  = localStorage.getItem('caption');
+    const year1    = localStorage.getItem('year1');
+
+    if (dadName)  { document.getElementById('input-name').value = dadName; updateName(dadName); }
+    if (fromName) { document.getElementById('input-from').value = fromName; updateFrom(fromName); }
+    if (message)  { document.getElementById('input-message').value = message; updateMessage(message); }
+    if (caption)  { document.getElementById('input-caption').value = caption; }
+    if (year1)    { document.getElementById('input-year1').value = year1; updateMemory(0,'year',year1); }
+
+    setTimeout(launchConfetti, 800);
+  });
+
+  /* ── TOAST ── */
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  /* ── CONFETTI ── */
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [], animating = false;
+  function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+  const COLORS = ['#C9A84C','#E8CC7A','#0D1B4B','#2A3F8F','#C4556A','#ffffff','#FBF5E6'];
+  function launchConfetti() {
+    particles = [];
+    for (let i = 0; i < 180; i++) particles.push({
+      x: Math.random()*canvas.width, y: -10 - Math.random()*200,
+      w: 8+Math.random()*8, h: 4+Math.random()*6,
+      color: COLORS[Math.floor(Math.random()*COLORS.length)],
+      vx: (Math.random()-0.5)*3, vy: 2+Math.random()*4,
+      rot: Math.random()*360, rspeed: (Math.random()-0.5)*8, alpha: 1
+    });
+    if (!animating) { animating = true; animateConfetti(); }
+  }
+  function animateConfetti() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p => {
+      p.x+=p.vx; p.y+=p.vy; p.rot+=p.rspeed;
+      if (p.y > canvas.height*0.85) p.alpha -= 0.025;
+      ctx.save(); ctx.globalAlpha = Math.max(0,p.alpha);
+      ctx.translate(p.x+p.w/2, p.y+p.h/2); ctx.rotate(p.rot*Math.PI/180);
+      ctx.fillStyle = p.color; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore();
+    });
+    particles = particles.filter(p => p.alpha > 0);
+    if (particles.length) requestAnimationFrame(animateConfetti); else animating = false;
+  }
+</script>
+</body>
+</html>
